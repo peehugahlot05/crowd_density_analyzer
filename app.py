@@ -1,12 +1,15 @@
-import gdown
 import os
+import gdown
 
-model_path = 'models/partBmodel_best.pth'
+model_dir = 'models'
+model_path = os.path.join(model_dir, 'partBmodel_best.pth')
 
 if not os.path.exists(model_path):
-    os.makedirs('models', exist_ok=True)
+    os.makedirs(model_dir, exist_ok=True)
     print("Downloading CSRNet model from Google Drive...")
-    gdown.download('https://drive.google.com/uc?id=1toFG5ZxJfzPox5ITR_ga2LxUL_fQZyb9', model_path, quiet=False)
+    url = 'https://drive.google.com/uc?id=1toFG5ZxJfzPox5ITR_ga2LxUL_fQZyb9'
+    gdown.download(url, model_path, quiet=False)
+
 
 import os
 import uuid
