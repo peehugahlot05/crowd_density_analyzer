@@ -1,17 +1,4 @@
 import os
-import gdown
-
-model_dir = 'models'
-model_path = os.path.join(model_dir, 'partBmodel_best.pth')
-
-if not os.path.exists(model_path):
-    os.makedirs(model_dir, exist_ok=True)
-    print("Downloading CSRNet model from Google Drive...")
-    url = 'https://drive.google.com/uc?id=1toFG5ZxJfzPox5ITR_ga2LxUL_fQZyb9'
-    gdown.download(url, model_path, quiet=False)
-
-
-import os
 import uuid
 import cv2
 import numpy as np
@@ -21,10 +8,20 @@ import torch.nn.functional as F
 from flask import Flask, render_template, request
 from torchvision import transforms
 from ultralytics import YOLO
+from model import CSRNet  # Make sure model.py exists
+import gdown
 
-from model import CSRNet  # Ensure this file exists
+# -------------------- Download CSRNet Model from Drive --------------------
+model_dir = 'models'
+model_path = os.path.join(model_dir, 'partBmodel_best.pth')
+os.makedirs(model_dir, exist_ok=True)
 
-# -------------------- Setup --------------------
+if not os.path.exists(model_path):
+    print("Downloading CSRNet model from Google Drive...")
+    url = 'https://drive.google.com/uc?id=1toFG5ZxJfzPox5ITR_ga2LxUL_fQZyb9'
+    gdown.download(url, model_path, quiet=False)
+
+# -------------------- Flask Setup --------------------
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/outputs'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -33,23 +30,28 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # -------------------- Load YOLOv8 --------------------
-yolo_model = YOLO("models/yolov8s.pt")
+yolo_model = YOLO("yolov8n.pt")  # Automatically downloads from Ultralytics
 
 # -------------------- Load CSRNet --------------------
 csrnet_model = CSRNet().to(device)
 
-# ✅ Load only the weights from the checkpoint
-checkpoint = torch.load("models/partBmodel_best.pth", map_location=device)
-csrnet_model.load_state_dict(checkpoint["state_dict"])
+# Load only the weights from the checkpoint
+checkpoint = torch.load(model_path, map_location=device)
+if 'state_dict' in checkpoint:
+    csrnet_model.load_state_dict(checkpoint['state_dict'])
+else:
+    csrnet_model.load_state_dict(checkpoint)
+
 csrnet_model.eval()
 
-# -------------------- CSRNet Preprocessing --------------------
+# -------------------- Preprocessing --------------------
 transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
                          std=[0.229, 0.224, 0.225])
 ])
 
+# -------------------- Utility Functions --------------------
 def predict_density(image):
     img_tensor = transform(image).unsqueeze(0).to(device)
     with torch.no_grad():
@@ -126,9 +128,11 @@ def analyze():
                            level=level,
                            alert=alert)
 
-# -------------------- Run --------------------
+# -------------------- For Deployment (Railway/Render) --------------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
+
 
 
 
