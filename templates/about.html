@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About - Crowd Density Analyzer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <h1><i class="fas fa-users"></i> Crowd Density Analyzer</h1>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/about" class="active">About</a>
+      <a href="/docs">Docs</a>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="info-section">
+    <h2>About This Project</h2>
+    <p>
+      The <strong>Crowd Density Analyzer</strong> is a smart web application built using computer vision and deep learning techniques to help monitor and manage crowd density in public spaces. It is ideal for use in:
+    </p>
+    <ul>
+      <li>Events & Gatherings</li>
+      <li>Public Transport Stations</li>
+      <li>Shopping Malls</li>
+      <li>Disaster Management Zones</li>
+    </ul>
+
+    <p>
+      Our app uses <strong>YOLOv8</strong> for real-time person detection and <strong>CSRNet</strong> for accurate crowd density estimation. These models complement each other — YOLO detects and counts visible people, while CSRNet estimates the total density, including occluded or partially visible individuals.
+    </p>
+
+    <div class="about-stats">
+      <div class="stat-box">
+        <i class="fas fa-bolt"></i>
+        <h4>Real-Time Alerts</h4>
+        <p>Get immediate alerts for high-density zones</p>
+      </div>
+      <div class="stat-box">
+        <i class="fas fa-eye"></i>
+        <h4>Accurate Detection</h4>
+        <p>Combines YOLO & CSRNet for robust counting</p>
+      </div>
+      <div class="stat-box">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <h4>Simple Interface</h4>
+        <p>Upload image & receive results instantly</p>
+      </div>
+    </div>
+  </div>
+
+ 
+
+</body>
+</html>
+
+

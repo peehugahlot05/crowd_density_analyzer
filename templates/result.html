@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crowd Density Analyzer - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <h1><i class="fas fa-users"></i> Crowd Density Analyzer</h1>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/docs">Docs</a>
+    </div>
+</nav>
+
+<div class="results-container">
+    <div class="result-summary">
+        <h2>Level: {{ level }}</h2>
+        <p><strong>Alert:</strong> <span class="alert">{{ alert }}</span></p>
+    </div>
+
+    <div class="image-section">
+        <div class="image-box">
+            <h3>Original Image</h3>
+            <img src="{{ url_for('static', filename='outputs/' + original_image) }}" alt="Original">
+        </div>
+        <div class="image-box">
+            <h3>YOLO Detection ({{ yolo_count }})</h3>
+            <img src="{{ url_for('static', filename='outputs/' + yolo_image) }}" alt="YOLO">
+        </div>
+        <div class="image-box">
+            <h3>CSRNet Heatmap ({{ csrnet_count }})</h3>
+            <img src="{{ url_for('static', filename='outputs/' + heatmap_image) }}" alt="Heatmap">
+        </div>
+    </div>
+
+    <div class="back-link">
+        <a href="/">← Analyze another</a>
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Docs - Crowd Density Analyzer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <h1><i class="fas fa-users"></i> Crowd Density Analyzer</h1>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/docs" class="active">Docs</a>
+    </div>
+  </div>
+
+  <!-- Docs Section -->
+  <div class="info-section">
+    <h2>How It Works</h2>
+    <p>This app uses two deep learning models to detect and estimate crowd levels from images:</p>
+
+    <div class="doc-cards">
+      <div class="doc-box">
+        <i class="fas fa-person-walking"></i>
+        <h4>YOLOv8</h4>
+        <p>Detects people in images using bounding boxes. Fast and real-time object detection.</p>
+      </div>
+      <div class="doc-box">
+        <i class="fas fa-fire-flame-curved"></i>
+        <h4>CSRNet</h4>
+        <p>Generates density maps to estimate crowd count, even when individuals are not clearly visible.</p>
+      </div>
+    </div>
+
+    <h3>Steps to Use</h3>
+    <ol>
+      <li>Go to the Home page.</li>
+      <li>Upload an image of a crowd scene.</li>
+      <li>Click Analyze to run YOLO and CSRNet.</li>
+      <li>View bounding boxes, heatmaps, and alert if high density is detected.</li>
+    </ol>
+
+    <h3>Technology Stack</h3>
+    <ul>
+      <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+      <li><strong>Backend:</strong> Python (Flask)</li>
+      <li><strong>Models:</strong> YOLOv8 (Ultralytics), CSRNet (PyTorch)</li>
+      <li><strong>Deployment:</strong> Render</li>
+    </ul>
+
+    <!-- FAQ Section -->
+    <h3 style="margin-top: 40px;">Frequently Asked Questions (FAQ)</h3>
+    <div class="faq">
+      <div class="faq-item">
+        <h4>📸 What image formats are supported?</h4>
+        <p>We support common formats like JPG, JPEG, and PNG.</p>
+      </div>
+      <div class="faq-item">
+        <h4>⏱️ How long does processing take?</h4>
+        <p>Typically 2–5 seconds depending on the image size and model load.</p>
+      </div>
+      <div class="faq-item">
+        <h4>🧠 How accurate is the crowd count?</h4>
+        <p>YOLO detects visible people. CSRNet estimates density even in crowded, occluded scenes. Combined, they give high accuracy.</p>
+      </div>
+      <div class="faq-item">
+        <h4>🚨 When is an alert triggered?</h4>
+        <p>If CSRNet’s estimated count crosses a high threshold (e.g. 143), an alert is shown.</p>
+      </div>
+    </div>
+  </div>
+
+ 
+
+</body>
+</html>
+
+
+
