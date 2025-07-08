@@ -1,10 +1,11 @@
 flask
+gunicorn
 ultralytics
 opencv-python
 torch
 torchvision
 Pillow
 numpy
-gunicorn
 gdown
+
 
