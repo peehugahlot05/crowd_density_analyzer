@@ -8,10 +8,10 @@ import torch.nn.functional as F
 from flask import Flask, render_template, request
 from torchvision import transforms
 from ultralytics import YOLO
-from model import CSRNet  # Make sure model.py exists
+from model import CSRNet  
 import gdown
 
-# -------------------- Download CSRNet Model from Drive --------------------
+#  Download CSRNet Model from Drive 
 model_dir = 'models'
 model_path = os.path.join(model_dir, 'partBmodel_best.pth')
 os.makedirs(model_dir, exist_ok=True)
@@ -21,7 +21,7 @@ if not os.path.exists(model_path):
     url = 'https://drive.google.com/uc?id=1toFG5ZxJfzPox5ITR_ga2LxUL_fQZyb9'
     gdown.download(url, model_path, quiet=False)
 
-# -------------------- Flask Setup --------------------
+#  Flask Setup 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/outputs'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -29,10 +29,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# -------------------- Load YOLOv8 --------------------
-yolo_model = YOLO("yolov8n.pt")  # Automatically downloads from Ultralytics
+#  Load YOLOv8 
+yolo_model = YOLO("yolov8n.pt")  
 
-# -------------------- Load CSRNet --------------------
+#  Load CSRNet 
 csrnet_model = CSRNet().to(device)
 
 # Load only the weights from the checkpoint
@@ -44,14 +44,14 @@ else:
 
 csrnet_model.eval()
 
-# -------------------- Preprocessing --------------------
+#  Preprocessing 
 transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
                          std=[0.229, 0.224, 0.225])
 ])
 
-# -------------------- Utility Functions --------------------
+#  Utility Functions 
 def predict_density(image):
     img_tensor = transform(image).unsqueeze(0).to(device)
     with torch.no_grad():
@@ -66,7 +66,7 @@ def generate_heatmap(density_map, original_shape):
     colored_heatmap = cv2.applyColorMap(heatmap_normalized, cv2.COLORMAP_JET)
     return colored_heatmap
 
-# -------------------- Routes --------------------
+#  Routes 
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -108,7 +108,7 @@ def analyze():
     heat_path = os.path.join(app.config['UPLOAD_FOLDER'], heat_filename)
     cv2.imwrite(heat_path, heat_overlay)
 
-    # ---- Alert Logic (Only Based on CSRNet Count) ----
+    # ---- Alert Logic  ----
     if csrnet_count < 63:
         level = "Low"
         alert = "No"
@@ -128,7 +128,7 @@ def analyze():
                            level=level,
                            alert=alert)
 
-# -------------------- For Deployment (Railway/Render) --------------------
+#  For Deployment  
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
